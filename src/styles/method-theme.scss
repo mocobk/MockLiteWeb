@@ -1,0 +1,60 @@
+.method-tag {
+  display: inline-block;
+  height: 32px;
+  padding: 0 10px;
+  line-height: 30px;
+  font-size: 12px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.method-tag--small {
+  height: 24px;
+  padding: 0 8px;
+  line-height: 22px;
+}
+
+.get {
+  background-color: #e7f0f7;
+  border: 1px solid #c3d9ec;
+  color: #0f6ab4
+}
+
+.post {
+  background-color: #e7f6ec;
+  border: 1px solid #c3e8d1;
+  color: #10a54a
+}
+
+.put {
+  background-color: #f9f2e9;
+  border: 1px solid #f0e0ca;
+  color: #c5862b
+}
+
+.head {
+  background-color: #fcffcd;
+  border: 1px solid #ffd20f;
+  color: #ffd20f
+}
+
+.delete {
+  background-color: #f5e8e8;
+  border: 1px solid #e8c6c7;
+  color: #a41e22
+}
+
+.patch {
+  background-color: #FCE9E3;
+  border: 1px solid #F5D5C3;
+  color: #D38042
+}
+
+
+.options {
+  background-color: #e7f0f7;
+  border: 1px solid #c3d9ec;
+  color: #0f6ab4
+}
+

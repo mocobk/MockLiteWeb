@@ -1,0 +1,27 @@
+# replace default config
+
+# multipass: true
+# full: true
+
+plugins:
+  # 示例
+  # - name
+  #
+  # or:
+  # - name: false
+  # - name: true
+  #
+  # or:
+  # - name:
+  #     param1: 1
+  #     param2: 2
+
+
+# 下面这个规则主要是方便 svgo 去除 svg fill 属性，因为有些 svg 是带多种颜色的
+# 如果需要带颜色，这里要去掉
+- removeAttrs:
+    attrs:
+      - 'fill'
+      - 'fill-rule'
+
+- removeStyleElement: true
