@@ -75,7 +75,7 @@
                 this.$router.push({path: path})
             },
             openAdmin(){
-                window.open('/admin', '_blank')
+                window.open('/admin/', '_blank')
             }
         }
     }
