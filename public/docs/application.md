@@ -31,4 +31,11 @@
 ![](./_media/20201014202200228.jpg ':size=30%')
 ![](./_media/20201014202133559.jpg ':size=30%')
 
+## 场景五：Mock GraphQL 接口
+<span class="no-needed">`测试`</span>
+
+GraphQL 接口一般 URL 都是同一个，大部分 Mock 工具无法区分拦截。MockLite 支持匹配 GraphQL 中的 `operationName` 或 `queryName`，从而可以针对不同 GraphQL 进行拦截匹配。
+
+![](./_media/20210531202910962.png ':size=30%')
+
 ## 更多场景等你发现

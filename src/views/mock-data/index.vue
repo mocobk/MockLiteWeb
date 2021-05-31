@@ -3,7 +3,7 @@
         <div class="container">
             <div class="header">
                 <el-page-header @back="goProjectsPage" :content="projectName" />
-                
+
                 <div class="header-form">
                     <el-input
                         placeholder="输入关键字搜索"
@@ -13,7 +13,7 @@
                         @clear="searchMockData"
                         clearable>
                     </el-input>
-                    
+
                     <el-button
                         size="mini"
                         plain
@@ -34,7 +34,7 @@
                     </el-button>
                 </div>
             </div>
-            
+
             <div class="table">
                 <div style="flex-grow: 1; width: 100%; position: relative; margin-bottom: 20px">
                     <div style="position: absolute; width: 100%; height: 100%">
@@ -58,16 +58,16 @@
                                 type="selection"
                                 width="45">
                             </el-table-column>
-                            
+
                             <el-table-column
                                 width="45">
                             </el-table-column>
-                            
+
                             <el-table-column
                                 type="index"
                                 width="45">
                             </el-table-column>
-                            
+
                             <el-table-column
                                 property="method"
                                 label="方法"
@@ -79,13 +79,13 @@
                                     </div>
                                 </template>
                             </el-table-column>
-                            
+
                             <el-table-column
                                 property="url"
                                 header-align="center"
                                 label="URL匹配">
                             </el-table-column>
-                            
+
                             <el-table-column
                                 property="match_type"
                                 align="center"
@@ -95,7 +95,7 @@
                                     {{scope.row.match_type===1 ? '正则': '包含'}}
                                 </template>
                             </el-table-column>
-                            
+
                             <el-table-column
                                 property="code"
                                 header-align="center"
@@ -103,13 +103,13 @@
                                 label="响应码"
                                 width="100">
                             </el-table-column>
-                            
+
                             <el-table-column
                                 property="description"
                                 header-align="center"
                                 label="描述">
                             </el-table-column>
-                            
+
                             <el-table-column
                                 property="status"
                                 align="center"
@@ -120,7 +120,7 @@
                                                size="small" @change="switchStatus(scope.row)($event)"></el-switch>
                                 </template>
                             </el-table-column>
-                            
+
                             <el-table-column
                                 label="操作"
                                 align="center"
@@ -140,7 +140,7 @@
                         </el-table>
                     </div>
                 </div>
-                
+
                 <el-pagination
                     @size-change="handlePageSizeChange"
                     @current-change="handleCurrentPageChange"
@@ -151,14 +151,14 @@
                     :total="pagination.total">
                 </el-pagination>
             </div>
-            
+
             <formDialog
                 :data="dialogData || defaultDialogData"
                 @close="dialogData.visible = false"
                 @success="handleDialogCommitSuccess">
             </formDialog>
         </div>
-    
+
     </div>
 </template>
 
@@ -173,7 +173,7 @@
         deleteMockData,
         batchDeleteMockData
     } from '@/api/mock'
-    
+
     export default {
         name: 'MockData',
         components: {
@@ -195,6 +195,7 @@
                         url: '',
                         method: 'GET',
                         match_type: 0,
+                        request: [],
                         code: 200,
                         content_type: 'application/json',
                         headers: '',
@@ -225,7 +226,7 @@
             // 优先使用 url 上的分页参数
             this.pagination.page = this.$route.query.page * 1 || this.pagination.page
             this.pagination.pageSize = this.$route.query.pageSize * 1 || this.pagination.pageSize
-            
+
             this.requestMockData()
         },
         methods: {
@@ -246,7 +247,7 @@
                     this.$nextTick(() => {
                         this.showTableComponent = true
                     })
-                    
+
                     this.tableData = res.data
                     this.pagination.total = res.total
                     // 还原选择状态
@@ -290,11 +291,11 @@
                     })
                 })
             },
-            
+
             showCreateDialog () {
                 this.dialogData = {
                     ...this.defaultDialogData,
-                    formData: { ...this.defaultDialogData.formData },
+                    formData: { ...this.defaultDialogData.formData, request: [] },
                     visible: true
                 }
             },
@@ -335,7 +336,7 @@
             },
             handleDialogCommitSuccess () {
                 if (this.dialogData.isEdit) {
-                    
+
                     // 编辑，目的只更新单个数据
                     getMockDataById(this.dialogData.formData.id).then((res) => {
                         if (this.dialogData.formData.hasOwnProperty('has_children')) {
@@ -357,7 +358,7 @@
                 const data = { project_id, method, url, match_type, content_type, status, id }
                 return (value) => {
                     putMockData(data).then(() => {
-                    
+
                     }).catch(() => {
                         row.status = 1 - value
                     })
@@ -409,12 +410,12 @@
 <style scoped lang="scss">
     @import "@/styles/method-theme.scss";
     @import "@/styles/variables.scss";
-    
+
     .view-box {
         width: 75vw;
         display: flex;
         align-items: stretch;
-        
+
         .container {
             width: 100%;
             margin: 5px 0;
@@ -423,24 +424,24 @@
             box-shadow: 0 0 25px 0 rgba(0, 0, 0, .1);
             display: flex;
             flex-direction: column;
-            
+
             .header {
                 display: flex;
                 justify-content: space-between;
-                
+
                 .el-page-header {
                     display: flex;
                     align-items: center;
                 }
-                
+
                 .header-form {
                     display: flex;
                     align-items: center;
-                    
+
                     * {
                         margin-left: 20px;
                     }
-                    
+
                     .el-input {
                         ::v-deep {
                             .el-input__inner {
@@ -450,46 +451,46 @@
                     }
                 }
             }
-            
+
             .table {
                 margin-top: 20px;
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
                 align-items: flex-end;
-                
-                
+
+
                 .el-table::before {
                     height: 0;
                 }
-                
+
                 ::v-deep .el-table__row--level-1 {
                     background-color: rgba(245, 247, 250, 0.4);
                 }
-                
+
                 .radio-tag {
                     $radio-tag-color: gray;
-                    
+
                     ::v-deep {
                         .el-radio__inner {
                             border-color: $radio-tag-color;
                             background: #fff;
                             cursor: auto;
                         }
-                        
+
                         .el-radio__label {
                             color: $radio-tag-color;
                             cursor: auto;
                         }
                     }
                 }
-                
+
                 .el-button {
                     padding: 7px;
                 }
             }
         }
-        
+
         ::v-deep {
             .is-always-shadow {
                 box-shadow: 0 0 25px 0 rgba(0, 0, 0, .1);

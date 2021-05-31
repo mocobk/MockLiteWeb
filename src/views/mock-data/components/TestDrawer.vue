@@ -5,11 +5,11 @@
         size="50%"
         :with-header="false"
         append-to-body>
-        
+
         <div class="container">
             <div class="title">匹配规则</div>
             <UrlMatchForm :data="data"></UrlMatchForm>
-            
+
             <div class="title">目标 URL</div>
             <el-input placeholder="请输入接口的 URL" v-model="url">
                 <el-button class="test-btn" slot="append" @click="runTest">
@@ -20,14 +20,14 @@
                     测试
                 </el-button>
             </el-input>
-            
+
             <div class="title">
                 返回结果
                 <span class="clipboard-btn" @click="copyResult" title="复制">
                     <svg-icon icon-class="clipboard" />
                 </span>
             </div>
-            
+
             <el-tabs type="border-card" @tab-click="onTabClick">
                 <el-tab-pane label="Body" class="response-content">
                     <AceEditor
@@ -37,7 +37,7 @@
                         :options="{highlightActiveLine: false}"
                         :readonly="true" />
                 </el-tab-pane>
-                
+
                 <el-tab-pane label="Headers" class="response-content">
                     <AceEditor
                         v-model="headers"
@@ -48,17 +48,17 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-    
-    
+
+
     </el-drawer>
 </template>
 
 <script>
     import AceEditor from '@/components/AceEditor'
-    import UrlMatchForm from '@/views/mock-data/components/UrlMatchForm'
+    import UrlMatchForm from '@/views/mock-data/components/RequestMatchForm'
     import handleClipboard from '@/utils/clipboard'
     import {testMockData} from '@/api/mock'
-    
+
     export default {
         name: 'TestDrawer',
         props: ['visible', 'data'],
@@ -107,26 +107,26 @@
                     this.showResultIcon = true
                 })
             }
-            
+
         }
     }
 </script>
 
 <style scoped lang="scss">
     @import "@/styles/variables";
-    
+
     .container {
         padding: 20px;
         display: flex;
         flex-direction: column;
         height: 100%;
-        
+
         .title {
             margin: 30px 0 10px 0;
             font-weight: bold;
             color: $--color-info;
         }
-        
+
         .el-collapse-item {
             ::v-deep{
                 .el-collapse-item__header{
@@ -134,7 +134,7 @@
                 }
             }
         }
-        
+
         .test-btn {
             ::v-deep {
                 span {
@@ -143,19 +143,19 @@
                 }
             }
         }
-        
+
         .el-tabs {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             box-shadow: none;
-            
+
             ::v-deep {
                 .el-tabs__content {
                     flex-grow: 1;
                     height: 100%;
                     padding: 5px;
-                    
+
                     .el-tab-pane {
                         height: 100%;
                         display: flex;
@@ -163,31 +163,31 @@
                 }
             }
         }
-        
+
         .response-content {
             flex-grow: 1;
-            
+
             ::v-deep {
                 /*去除 AceEditor 光标和括号高亮*/
                 .ace_cursor {
                     opacity: 0;
                 }
-                
+
                 .ace_bracket {
                     border: none;
                 }
             }
         }
-        
+
         .clipboard-btn {
             margin-left: 10px;
             cursor: pointer;
             position: relative;
-            
+
             &:hover {
                 color: $--color-primary;
             }
-            
+
             &::after {
                 position: absolute;
                 top: -10px;
@@ -195,7 +195,7 @@
                 left: -10px;
                 right: -10px;
                 content: "";
-                
+
             }
         }
     }

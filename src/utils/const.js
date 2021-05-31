@@ -55,6 +55,7 @@ export default {
         'text/plain',
         'text/vcard',
         'text/xml'
-    ]
-    
+    ],
+    requestBodyType: ['form-data', 'x-www-form-urlencoded', 'query', 'headers', 'json', 'GraphQL']
+
 }

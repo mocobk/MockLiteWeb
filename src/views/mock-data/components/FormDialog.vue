@@ -1,10 +1,9 @@
 <template>
     <el-dialog v-el-click-modal :title="data.title" width="60%" :visible.sync="data.visible" @close="clearValidate" ref="dialog">
         <el-form :model="data.formData" label-position="top" :rules="formRules" ref="commitMockDataForm">
-            <el-form-item label="匹配规则" prop="url">
-                <UrlMatchForm :data="data"></UrlMatchForm>
-            </el-form-item>
-            
+
+            <UrlMatchForm :data="data"></UrlMatchForm>
+
             <el-form-item label="响应内容">
                 <div class="response">
                     <div class="response-item response-options">
@@ -25,7 +24,7 @@
                                 </el-option>
                             </el-select>
                         </div>
-                        
+
                         <div>
                             <label>Content-Type</label>
                             <el-select
@@ -43,7 +42,7 @@
                                 </el-option>
                             </el-select>
                         </div>
-                        
+
                         <div>
                             <label>自定义 Headers</label>
                             <el-checkbox
@@ -52,7 +51,7 @@
                             </el-checkbox>
                         </div>
                     </div>
-                    
+
                     <div v-if="isAddHeaders" class="response-item">
                         <label>Response Header</label>
                         <AceEditor
@@ -62,7 +61,7 @@
                             showFormatBtn
                         />
                     </div>
-                    
+
                     <div class="response-item">
                         <label>Response Body</label>
                         <AceEditor
@@ -73,14 +72,14 @@
                     </div>
                 </div>
             </el-form-item>
-            
+
             <el-form-item label="描述">
                 <el-input type="textarea" :rows="2" v-model="data.formData.description" placeholder="请输入描述"></el-input>
             </el-form-item>
-        
+
         </el-form>
-        
-        
+
+
         <div slot="footer">
             <div>
                 <span style="margin-right: 10px; font-size: 0.8em">是否开启</span>
@@ -92,7 +91,7 @@
                 <el-button type="primary" @click="commitMockData">确 定</el-button>
             </div>
         </div>
-        
+
         <TestDrawer :data="data" :visible="testDrawerVisible" @update:visible="testDrawerVisible = $event"></TestDrawer>
     </el-dialog>
 </template>
@@ -101,13 +100,13 @@
     import AceEditor from '@/components/AceEditor'
     import ConstData from '@/utils/const'
     import TestDrawer from '@/views/mock-data/components/TestDrawer'
-    import UrlMatchForm from '@/views/mock-data/components/UrlMatchForm'
+    import RequestMatchForm from '@/views/mock-data/components/RequestMatchForm'
     import {postMockData, putMockData} from '@/api/mock'
-    
+
     export default {
         name: 'FormDialog',
         components: {
-            AceEditor, TestDrawer, UrlMatchForm
+            AceEditor, TestDrawer, UrlMatchForm: RequestMatchForm
         },
         props: {
             data: Object,
@@ -123,7 +122,7 @@
                     'url': {required: true, message: '请输入 URL 匹配规则', trigger: 'blur'}
                 },
                 isClickModal: false
-                
+
             }
         },
         computed: {
@@ -140,16 +139,17 @@
                 }
             }
         },
-        
+
         methods: {
             closeDialog() {
                 this.$emit('close')
             },
             commitMockData() {
                 this.$refs['commitMockDataForm'].validate((valid) => {
-                    if (valid && this.validateHeaders()) {
+                    if (valid && this.validateRequest() && this.validateHeaders()) {
                         const api = this.data.title === '新增' ? postMockData : putMockData
-                        api(this.data.formData).then(() => {
+                        const data = {...this.data.formData, request: JSON.stringify(this.data.formData.request)}
+                        api(data).then(() => {
                                 this.$emit('success')
                                 this.closeDialog()
                             }
@@ -159,6 +159,16 @@
             },
             clearValidate() {
                 this.$refs['commitMockDataForm'].clearValidate()
+            },
+            validateRequest(){
+                return !this.data.formData.request.some(item => {
+                  if (!item.key || !item.value) {
+                    this.$message.error('请求匹配规则中 key 或 value 不能为空')
+                    return true
+                  } else {
+                    return false
+                  }
+                })
             },
             validateHeaders(){
                 if(this.isAddHeaders){
@@ -172,27 +182,28 @@
                 }
                 return true
             },
+
         }
-        
+
     }
 </script>
 
 <style scoped lang="scss">
     @import "@/styles/variables.scss";
-    
+
     ::v-deep {
         .el-dialog__footer {
             color: $--color-info;
-            
+
             div {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                
+
                 .open-panel {
                     cursor: pointer;
                     font-size: 32px;
-                    
+
                     &:hover {
                         color: $--color-primary;
                     }
@@ -200,7 +211,7 @@
             }
         }
     }
-    
+
     .el-form {
         .el-form-item {
             ::v-deep {
@@ -209,7 +220,7 @@
                 }
             }
         }
-        
+
         .response {
             .response-item {
                 margin-top: 10px;
@@ -220,22 +231,22 @@
             .response-item:first-child{
                 margin-top: 0;
             }
-            
+
             .response-options {
                 display: flex;
                 justify-content: space-between;
-    
+
                 label {
                     margin-right: 10px;
                 }
-                
+
                 ::v-deep {
                     .el-input {
                         width: 200px;
                     }
                 }
             }
-            
+
         }
     }
 
